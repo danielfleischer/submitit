@@ -99,9 +99,18 @@ class SlurmInfoWatcher(core.InfoWatcher):
         return all_stats
 
 
+class DummyWatcher(core.InfoWatcher):
+    def _make_command(self) -> tp.Optional[tp.List[str]]:
+        return ["echo","Not using sacct."]
+    def get_state(self, job_id: str, mode: str = "standard") -> str:
+        return "COMPLETED"
+    def read_info(self, string: tp.Union[bytes, str]) -> tp.Dict[str, tp.Dict[str, str]]:
+        return {}
+
+     
 class SlurmJob(core.Job[core.R]):
     _cancel_command = "scancel"
-    watcher = SlurmInfoWatcher(delay_s=600)
+    watcher = DummyWatcher(delay_s=600)
 
     def _interrupt(self, timeout: bool = False) -> None:
         """Sends preemption or timeout signal to the job (for testing purpose)
