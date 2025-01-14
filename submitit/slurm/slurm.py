@@ -110,7 +110,7 @@ class DummyWatcher(core.InfoWatcher):
      
 class SlurmJob(core.Job[core.R]):
     _cancel_command = "scancel"
-    watcher = DummyWatcher(delay_s=600)
+    watcher = DummyWatcher(delay_s=5)
 
     def _interrupt(self, timeout: bool = False) -> None:
         """Sends preemption or timeout signal to the job (for testing purpose)
